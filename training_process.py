@@ -2,11 +2,12 @@ from model_arch import *
 from utils import *
 
 
-def train_model(dataname, train_tensors, val_tensors, test_tensors, train_opt, lambda_f, lambda_r, seed):
+def train_model(datatype, dataname, train_tensors, val_tensors, test_tensors, train_opt, lambda_f, lambda_r, seed):
     """
     定义模型训练过程
 
     Args:
+        datatype: 数据类型
         dataname: 数据集名称
         train_tensors: 训练集数据
         val_tensors: 验证集数据
@@ -122,7 +123,10 @@ def train_model(dataname, train_tensors, val_tensors, test_tensors, train_opt, l
         #  前500轮不考虑鉴别器的影响，后续每间隔k轮结合鉴别器更新分类器参数
         if epoch < 500:
             c_loss = bce_loss((F.tanh(gen_y) + 1) / 2, (y_train + 1) / 2)
+            if datatype == "poisoned":
+                c_loss = 0.1 * c_loss
             c_loss.backward()
+            c_losses.append(c_loss)
             optimizer_C.step()
 
         elif epoch % k == 0:
@@ -146,7 +150,7 @@ def train_model(dataname, train_tensors, val_tensors, test_tensors, train_opt, l
             c_loss.backward()
             optimizer_C.step()
 
-        c_losses.append(c_loss)
+            c_losses.append(c_loss)
 
         if epoch % 200 == 0:
             print(

@@ -26,7 +26,7 @@ if __name__ == '__main__':
     )
     print("--------------------------------------------------------------")
 
-    train_result = []
+    test_result = []
     train_tensors = Namespace(XS_train=XS_train, y_train=y_train, s1_train=s1_train)
     val_tensors = Namespace(XS_val=XS_val, y_val=y_val, s1_val=s1_val)
     test_tensors = Namespace(XS_test=XS_test, y_test=y_test, s1_test=s1_test)
@@ -37,15 +37,15 @@ if __name__ == '__main__':
 
     torch.cuda.empty_cache()
     for lambda_f in lambda_f_set:
-        train_result.append(
-            train_model(args['dataname'],train_tensors, val_tensors, test_tensors, train_opt, lambda_f=lambda_f, lambda_r=lambda_r,
+        test_result.append(
+            train_model(args['type'],args['dataname'],train_tensors, val_tensors, test_tensors, train_opt, lambda_f=lambda_f, lambda_r=lambda_r,
                         seed=seed))
 
     print("--------------------------------------------------------------------------------")
-    print(f"------------------ Training Results of FR-Train on {args['type']} {args['dataname']} data ------------------")
-    for i in range(len(train_result)):
+    print(f"------------------ Test Results of FR-Train on {args['type']} {args['dataname']} data ------------------")
+    for i in range(len(test_result)):
         print(
             "[Lambda_f: %.2f] [Lambda_r: %.2f] Accuracy : %.3f, Disparate Impact : %.3f, Demographic Parity : %.3f "
-            % (train_result[i][0][0], train_result[i][0][1], train_result[i][0][2], train_result[i][0][3], train_result[i][0][4])
+            % (test_result[i][0][0], test_result[i][0][1], test_result[i][0][2], test_result[i][0][3], test_result[i][0][4])
         )
     print("--------------------------------------------------------------------------------")

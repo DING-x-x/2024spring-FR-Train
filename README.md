@@ -35,12 +35,20 @@ pip install -r requirement.txt
 
 ## 运行方法
 运行不同数据集与不同数据类型的示例
+
+论文原有合成数据集
 ```shell
-python main.py --dataname synthetic --type clean
+python main.py --dataname synthetic --type clean  
 python main.py --dataname synthetic --type poisoned
+```
+adult数据集
+```shell
 python main.py --dataname adult --type clean
 python main.py --dataname adult --type poisoned
+```
+
+german数据集
+```shell
 python main.py --dataname german --type clean
 python main.py --dataname german --type poisoned
 ```
-
